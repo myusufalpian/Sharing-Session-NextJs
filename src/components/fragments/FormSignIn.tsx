@@ -1,35 +1,40 @@
-import { redirect } from "next/navigation";
-import Button from "../elements/Button";
-import InputForm from "../elements/Input";
-import { Urls } from "@/constants/urls";
-
-const handleLogin = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-  event.preventDefault();
-  const username = (document.getElementById('username') as HTMLInputElement).value;
-  const password = (document.getElementById('password') as HTMLInputElement).value;
-  const response = await fetch(`${Urls.baseUrl}auth/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      username: username,
-      password: password,
-      expiresInMins: 30,
-    }),
-  });
-
-  const data = await response.json();
-  if (!response.ok) {
-    alert(data.message);
-    return;
-  }
-  localStorage.setItem('Authorization', data.token);
-  alert('Login Successful');
-  redirect('/auth/signin')
-};
+import { useDispatch } from 'react-redux';
+import { setToken } from '@/redux/store/authSlice';
+import { fetchApi } from '@/utils/api';
+import Button from '../elements/Button';
+import InputForm from '../elements/Input';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 const FormSignIn = (): JSX.Element => {
+	const dispatch = useDispatch();
+	const router = useRouter();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	const handleLogin = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+		event.preventDefault();
+		setIsLoading(true);
+		try {
+			const username = (document.getElementById('username') as HTMLInputElement).value;
+			const password = (document.getElementById('password') as HTMLInputElement).value;
+			const response = await fetchApi(`auth/login`, 'POST', { username, password });	
+			const data = await (await response).json();
+			if (response.status === 200) {
+				dispatch(setToken(data.token));
+				localStorage.setItem('Authorization', data.token); // Optional: keep it in localStorage
+				alert('Sign In Successful');
+				router.push('/');
+			} else {
+				alert(`Sign In Failed, ${data.message}`);
+			}
+		} catch (error) {
+			console.error('Error during login:', error);
+      		alert(`Sign In Failed, ${error}`);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
   return (
     <form onSubmit={handleLogin}>
       <div className="mb-6">
