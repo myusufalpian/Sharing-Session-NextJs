@@ -21,7 +21,7 @@ const FormSignIn = (): JSX.Element => {
 			const data = await (await response).json();
 			if (response.status === 200) {
 				dispatch(setToken(data.token));
-				localStorage.setItem('Authorization', data.token); // Optional: keep it in localStorage
+				localStorage.setItem('Authorization', data.token);
 				alert('Sign In Successful');
 				router.push('/');
 			} else {
