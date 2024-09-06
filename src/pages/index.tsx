@@ -15,7 +15,7 @@ export default function Home() {
 
   return (
     <div className="flex w-screen h-screen">
-      <main className="flex-1 p-6 bg-gray-100">
+      <main className="flex-1 p-6">
         <div className="flex flex-col items-center justify-center min-h-screen">
           <h1 className="text-3xl font-bold text-blue-500 underline">Dashboard</h1>
         </div>

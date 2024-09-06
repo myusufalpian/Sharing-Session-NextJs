@@ -11,7 +11,7 @@ const FormSignUp = () => {
             <InputForm htmlfor={'password'} type={'password'} placeholder={'************'} name={'password'} id={'password'}>Password</InputForm>
             <InputForm htmlfor={'confirm-password'} type={'password'} placeholder={'************'} name={'confirm-password'} id={'confirm-password'}>Confirm Password</InputForm>
           </div>
-          <Button variant='bg-blue-700' text='text-white' classname = 'w-full'>Sign Up</Button>
+          <Button variant='bg-blue-900' text='text-white' classname = 'w-full'>Sign Up</Button>
         </form>
     )
 }

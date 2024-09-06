@@ -11,7 +11,7 @@ const FormSignIn = (): JSX.Element => {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const handleLogin = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+	const handleSignIn = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
 		event.preventDefault();
 		setIsLoading(true);
 		try {
@@ -36,12 +36,12 @@ const FormSignIn = (): JSX.Element => {
 	};
 
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleSignIn}>
       <div className="mb-6">
         <InputForm htmlfor={'username'} type={'text'} placeholder={'example@email.com'} name={'username'} id={'username'}>Username</InputForm>
         <InputForm htmlfor={'password'} type={'password'} placeholder={'************'} name={'password'} id={'password'}>Password</InputForm>
       </div>
-      <Button variant='bg-blue-700' text='text-white' classname='w-full'>Sign In</Button>
+      <Button variant='bg-blue-900' text='text-white' classname='w-full'>Sign In</Button>
     </form>
   );
 }

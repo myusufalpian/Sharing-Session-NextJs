@@ -12,7 +12,7 @@ const AppShell = ({ children }: Props): JSX.Element => {
   const { pathname } = useRouter();
   
   return (
-    <div className="flex h-screen bg-slate-100">
+    <div className="flex h-screen">
       { !disabled.includes(pathname) && <Sidebar /> }
       <main className="flex-1 p-4">
         {children}
