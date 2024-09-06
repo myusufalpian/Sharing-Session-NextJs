@@ -16,7 +16,7 @@ const Sidebar = () => {
 	return (
 		<>
 			<div
-				className={`fixed top-0 left-0 h-full bg-gray-800 text-white transition-transform transform ${
+				className={`fixed top-0 left-0 h-full bg-gray-900 text-white transition-transform transform ${
 				isOpen ? "translate-x-0" : "-translate-x-full"
 				} w-64 z-30`}
 			>
@@ -29,24 +29,24 @@ const Sidebar = () => {
 				<div className="p-5">
 					<h3 className="pt-10 pl-4 mb-4 text-xl font-bold">Toko Biru</h3>
 					<ul>
-						<Link href={"/"}><li className="px-4 py-2 hover:bg-gray-900">Home</li></Link>
+						<Link href={"/"}><li className="px-4 py-2 hover:bg-gray-950">Home</li></Link>
 						<li>
 							<button
 								onClick={toggleDropdown}
-								className="w-full px-4 py-2 text-left hover:bg-gray-900"
+								className="w-full px-4 py-2 text-left hover:bg-gray-950"
 							>
 								About
 							</button>
 							{isDropdownOpen && (
-								<ul className="pl-4 bg-gray-900">
+								<ul className="pl-4 bg-gray-950">
 									<Link href="/profile"><li className="px-4 py-2 hover:bg-gray-950">Account</li></Link>
-									<Link href="/order"><li className="px-4 py-2 hover:bg-blue-950">Orders</li></Link>
+									<Link href="/order"><li className="px-4 py-2 hover:bg-gray-950">Orders</li></Link>
 								</ul>
 							)}
 						</li>
-						<Link href={"/products"}><li className="px-4 py-2 hover:bg-blue-950">Product</li></Link>
-						<li className="px-4 py-2 hover:bg-blue-950">Cart</li>
-						<Link href={"/auth/signout"}><li className="px-4 py-2 hover:bg-blue-950">Sign Out</li></Link>
+						<Link href={"/products"}><li className="px-4 py-2 hover:bg-gray-950">Product</li></Link>
+						<li className="px-4 py-2 hover:bg-gray-900">Cart</li>
+						<Link href={"/auth/signout"}><li className="px-4 py-2 hover:bg-gray-950">Sign Out</li></Link>
 					</ul>
 				</div>
 			</div>

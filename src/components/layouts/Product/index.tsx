@@ -17,7 +17,7 @@ interface Props {
 const CardProduct = (props: Props) => {
     const { children } = props;
     return (
-        <div className="flex flex-col justify-between w-full max-w-sm m-8 bg-gray-800 border border-gray-700 rounded-lg shadow ">
+        <div className="flex flex-col justify-between w-full max-w-sm m-8 bg-gray-800 border border-gray-800 rounded-lg shadow ">
             {children}
         </div>
     )
@@ -49,7 +49,7 @@ const Footer = (props: Props) => {
         <div className="flex items-center justify-between p-4"> 
             <div className="text-xl font-bold text-white">{`Rp. ${price?.toLocaleString('id-ID')},00`}</div>
             <div className="text-xl font-bold text-white">{`* ${rating}`}</div>
-                <Button variant = {variant} text='text-white' children={btnText} classname = 'my-5 mr-5' onClick={() => onClickHandler} />
+            {/* <Button variant = {variant} text='text-white' children={btnText} classname = 'my-5 mr-5' onClick={() => onClickHandler} /> */}
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import CardProduct from "@/components/layouts/Product";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchApi } from "@/utils/api";
+import Link from "next/link";
 
 interface Product {
     id: number;
@@ -97,17 +98,19 @@ const ProductsPage = () => {
 
             <div className="grid w-full grid-cols-1 gap-4 pt-5 sm:grid-cols-2 md:grid-cols-3">
                 {filteredProducts.map((product) => (
-                    <CardProduct key={product.id}>
-                        <CardProduct.Header imgSource={product.thumbnail} />
-                        <CardProduct.Body text={product.description} tittle={product.title} />
-                        <CardProduct.Footer
-                            price={product.price}
-                            rating={product.rating}
-                            variant="bg-green-800"
-                            btnText={`Detail`}
-                            onClickHandler={handlerAddToCart}
-                        />
-                    </CardProduct>
+                    <Link href={`/products/${product.id}`} key={product.id}>
+                        <CardProduct key={product.id}>
+                            <CardProduct.Header imgSource={product.thumbnail} />
+                            <CardProduct.Body text={product.description} tittle={product.title} />
+                            <CardProduct.Footer
+                                price={product.price}
+                                rating={product.rating}
+                                variant="bg-green-800"
+                                btnText={`Detail`}
+                                onClickHandler={handlerAddToCart}
+                            />
+                        </CardProduct>
+                    </Link>
                 ))}
             </div>
         </div>

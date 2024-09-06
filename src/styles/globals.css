@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.fixed-image {
+    position: fixed;
+    top: 16px;
+    left: 16px; /* Adjust based on your layout */
+    width: 100%; /* Adjust or use fixed width */
+    max-width: 400px; /* Adjust based on design */
+}
