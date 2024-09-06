@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { setToken, setUser } from '@/redux/store/authSlice';
+import { setAuth, setUser } from '@/redux/store/authSlice';
 import { fetchApi } from '@/utils/api';
 import Button from '../elements/Button';
 import InputForm from '../elements/Input';
@@ -22,7 +22,7 @@ const FormSignIn = (): JSX.Element => {
             
             if (response.status === 200) {
                 // Save token and user info in Redux store
-                dispatch(setToken(data.token));
+                dispatch(setAuth(data.token));
                 dispatch(setUser({
                     id: data.id,
                     username: data.username,
@@ -55,7 +55,7 @@ const FormSignIn = (): JSX.Element => {
                 <InputForm htmlfor={'username'} type={'text'} placeholder={'example@email.com'} name={'username'} id={'username'}>Username</InputForm>
                 <InputForm htmlfor={'password'} type={'password'} placeholder={'************'} name={'password'} id={'password'}>Password</InputForm>
             </div>
-            <Button variant='bg-blue-900 w-full' text='text-white'>Sign In</Button>
+            <Button variant='bg-gray-900 w-full' text='text-white'>Sign In</Button>
         </form>
     );
 }
