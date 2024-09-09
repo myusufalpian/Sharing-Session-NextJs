@@ -6,11 +6,7 @@ import { fetchApi } from '@/utils/api';
 import { Product } from '@/constants/type/product';
 import ProductDetail from '@/components/layouts/Product/Detail';
 import ErrorLayout from '@/components/layouts/Error/index';
-
-interface ErrorHandler {
-    message: string;
-    statusCode: number;
-}
+import { ErrorHandler } from '@/constants/type/errorType';
 
 const ProductDetailPage = () => {
     const router = useRouter();

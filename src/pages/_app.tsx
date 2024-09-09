@@ -1,15 +1,18 @@
 import AppShell from './../components/layouts/AppShell';
 import '@/styles/globals.css';
-import React from 'react';
-import { Provider } from 'react-redux';
+import React, { useEffect } from 'react';
+import { Provider, useDispatch } from 'react-redux';
 import { store } from '@/redux/store/store';
+import { setUser } from '@/redux/store/authSlice';
 
-export default function App({ Component, pageProps }: any) {
-  	return (
-		<Provider store={store}>
+const App = ({ Component, pageProps }: any) => {
+    return (
+        <Provider store={store}>
 			<AppShell>
 				<Component {...pageProps} />
 			</AppShell>
-		</Provider>
-  	);
+        </Provider>
+    );
 }
+
+export default App;

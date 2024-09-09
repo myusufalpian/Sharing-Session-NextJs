@@ -45,7 +45,7 @@ const Sidebar = () => {
 							)}
 						</li>
 						<Link href={"/products"}><li className="px-4 py-2 hover:bg-gray-950">Product</li></Link>
-						<li className="px-4 py-2 hover:bg-gray-900">Cart</li>
+						<Link href={"/carts"}><li className="px-4 py-2 hover:bg-gray-950">Cart</li></Link>
 						<Link href={"/auth/signout"}><li className="px-4 py-2 hover:bg-gray-950">Sign Out</li></Link>
 					</ul>
 				</div>

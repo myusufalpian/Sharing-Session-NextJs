@@ -1,10 +1,11 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAuth, setUser } from '@/redux/store/authSlice';
 import { fetchApi } from '@/utils/api';
 import Button from '../elements/Button';
 import InputForm from '../elements/Input';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { RootState } from '@/redux/store/store';
 
 const FormSignIn = (): JSX.Element => {
     const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const FormSignIn = (): JSX.Element => {
             if (response.status === 200) {
                 // Save token and user info in Redux store
                 dispatch(setAuth(data.token));
-                dispatch(setUser({
+                const user = {
                     id: data.id,
                     username: data.username,
                     email: data.email,
@@ -31,11 +32,10 @@ const FormSignIn = (): JSX.Element => {
                     lastName: data.lastName,
                     gender: data.gender,
                     image: data.image
-                }));
-                
-                // Store token in localStorage
+                };
+                dispatch(setUser(user));
                 localStorage.setItem('Authorization', data.token);
-                
+                localStorage.setItem('User', JSON.stringify(user));
                 alert('Sign In Successful');
                 router.push('/');
             } else {
