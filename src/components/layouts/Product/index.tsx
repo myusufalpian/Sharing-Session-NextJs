@@ -7,7 +7,7 @@ interface Props {
     onClickHandler?: () => void
     variant?: string
     text?: string
-    tittle?: string
+    title?: string
     imgSource?: string
     btnText?: string
     price?: number
@@ -34,10 +34,10 @@ const Header = (props: Props) => {
 }
 
 const Body = ( props: Props) : JSX.Element => {
-    const { tittle, text } = props;
+    const { title, text } = props;
     return (
         <div className="h-full px-5 pb-4">
-            <h5 className="pb-4 text-xl font-semibold tracking-tight text-white">{tittle}</h5>
+            <h5 className="pb-4 text-xl font-semibold tracking-tight text-white">{title}</h5>
             <p className="font-normal text-white text-s">{text}</p>
         </div>
     )
