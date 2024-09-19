@@ -1,101 +1,80 @@
-import CardProduct from "@/components/layouts/Product";
-import { useEffect, useState } from "react";
-import { fetchApi } from "@/utils/api";
-import Link from "next/link";
+import { useState } from "react";
+import useProducts from "@/hooks/useProducts";
+import CustomAlert from "@/components/fragments/CustomAlert";
+import QuantityModal from "@/components/fragments/QuantityModal";
 import { Product } from "@/constants/type/product";
-import { setProducts } from "@/redux/store/productSlice";
-import { useDispatch } from "react-redux";
+import CardProduct from "@/components/layouts/Product";
+import Link from "next/link";
+import { fetchApi } from "@/utils/api";
+import { useSelector } from "react-redux";
 
 const ProductsPage = () => {
-    const dispatch = useDispatch();
-    const [productList, setProductList] = useState<Product[]>([]);
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-    const [categories, setCategories] = useState<string[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<string>('All');
-    const [sortCriteria, setSortCriteria] = useState<string>('rating');
-    const [inStockOnly, setInStockOnly] = useState<boolean>(false);
-    const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
+    const {
+        filteredProducts,
+        categories,
+        selectedCategory,
+        sortCriteria,
+        setSelectedCategory,
+        setSortCriteria,
+        handleSearchProduct,
+    } = useProducts();
 
-    useEffect(() => {
-        getProductList();
-        getCategoryList();
-    }, []);
+    const user = useSelector((state: any) => state.auth.user);
+    const [alertMessage, setAlertMessage] = useState<string | null>(null);
+    const [alertType, setAlertType] = useState<"info" | "success" | "error">("info");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-    useEffect(() => {
-        filterAndSortProducts();
-    }, [productList, selectedCategory, sortCriteria, inStockOnly]);
+    const handleFetchError = (message: string) => {
+        setAlertMessage(message);
+        setAlertType("error");
+    };
 
-    const getProductList = async () => {
-        const response = await fetchApi('products', 'GET');
-        const data = await (await response).json();
-        if (response.status === 200) {
-            setProductList(data.products);
-            dispatch(setProducts(data.products));
-        } else {
-            alert("Something went wrong");
+    const handleFetchSuccess = (message: string) => {
+        setAlertMessage(message);
+        setAlertType("success");
+    };
+
+    const handleCloseAlert = () => {
+        setAlertMessage(null);
+    };
+
+    const handleOpenQuantityModal = (product: Product) => {
+        setSelectedProduct(product);
+        setIsModalOpen(true);
+    };
+
+    const addProductToCart = async (product: Product, quantity: number) => {
+        let currentUser = user;
+        if (!currentUser) {
+            const storedUser = localStorage.getItem('User');
+            currentUser = storedUser ? JSON.parse(storedUser) : null;
         }
-    }
-
-    const getCategoryList = async () => {
-        const response = await fetchApi('products/category-list', 'GET');
-        const data = await (await response).json();
-        if (response.status === 200) {
-            setCategories(data);
-        } else {
-            alert("Something went wrong when getting category list");
+        
+        const body = {
+            userId: currentUser?.id,
+            products: [{ id: product.id, quantity }] // Send quantity along with product ID
+        };
+    
+        const response = await fetchApi(`carts/add`, 'POST', body);
+        if (!response.ok) {
+            throw new Error("Failed to add product to cart.");
         }
-    }
-
-    const handleSelectedCategory = async (category: string) => {
-        if (category !== 'All') {
-            const response = await fetchApi(`products/category/${category}`, 'GET');
-            const data = await (await response).json();
-            if (response.status === 200) {
-                setProductList(data.products);
-                dispatch(setProducts(data.products)); // Update Redux state
-            } else {
-                alert("Something went wrong when getting category list");
+    };
+    
+    const handleAddToCart = async (quantity: number) => {
+        if (selectedProduct) {
+            try {
+                await addProductToCart(selectedProduct, quantity);
+                handleFetchSuccess("Product added to cart successfully!");
+            } catch (error) {
+                handleFetchError("Failed to add product to cart.");
+            } finally {
+                setIsModalOpen(false);
+                setSelectedProduct(null);
             }
-        } else {
-            await getProductList();
         }
-    }
-
-    const handleSearchProduct = (searchValue: string) => {
-        if (searchTimeout) clearTimeout(searchTimeout);
-
-        const timeout = setTimeout(async () => {
-            const response = await fetchApi(`products/search?q=${searchValue}`, 'GET');
-            const data = await (await response).json();
-            if (response.status === 200) {
-                setProductList(data.products);
-                dispatch(setProducts(data.products));
-            } else {
-                alert("Something went wrong when searching for products");
-            }
-        }, 1000);
-
-        setSearchTimeout(timeout);
-    }
-
-    const filterAndSortProducts = () => {
-        let products = [...productList];
-
-        products.sort((a, b) => {
-            if (sortCriteria === 'rating') {
-                return b.rating - a.rating;
-            } else if (sortCriteria === 'price') {
-                return a.price - b.price;
-            }
-            return 0;
-        });
-
-        setFilteredProducts(products);
-    }
-
-    const handlerAddToCart = () => {
-        console.log("Add to Cart");
-    }
+    };
 
     return (
         <div className="flex flex-col items-center">
@@ -109,7 +88,7 @@ const ProductsPage = () => {
                 />
                 <select
                     value={selectedCategory}
-                    onChange={(e) => handleSelectedCategory(e.target.value)}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
                     className="p-2 border rounded"
                 >
                     <option value="All">All Categories</option>
@@ -130,23 +109,35 @@ const ProductsPage = () => {
 
             <div className="grid w-full grid-cols-1 gap-4 pt-5 sm:grid-cols-2 md:grid-cols-3">
                 {filteredProducts.map((product) => (
-                    <Link href={`/products/${product.id}`} key={product.id}>
-                        <CardProduct key={product.id}>
+                    <CardProduct key={product.id}>
+                        <Link href={`/products/${product.id}`}>
                             <CardProduct.Header imgSource={product.thumbnail} />
                             <CardProduct.Body text={product.description} title={product.title} />
-                            <CardProduct.Footer
-                                price={product.price}
-                                rating={product.rating}
-                                variant="bg-green-800"
-                                btnText={`Detail`}
-                                onClickHandler={handlerAddToCart}
-                            />
-                        </CardProduct>
-                    </Link>
+                        </Link>
+                        <CardProduct.Footer
+                            price={product.price}
+                            rating={product.rating}
+                            variant="bg-green-800"
+                            btnText={`Add to Cart`}
+                            onClickHandler={(e) => {
+                                e.stopPropagation();
+                                handleOpenQuantityModal(product);
+                            }}
+                        />
+                    </CardProduct>
                 ))}
             </div>
+
+            {alertMessage && (
+                <CustomAlert message={alertMessage} onClose={handleCloseAlert} type={alertType} />
+            )}
+            <QuantityModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                onConfirm={(quantity) => handleAddToCart(quantity)} // Pass the quantity to handleAddToCart
+            />
         </div>
     );
-}
+};
 
 export default ProductsPage;

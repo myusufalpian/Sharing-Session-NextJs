@@ -1,10 +1,11 @@
+/* eslint-disable react/no-children-prop */
 import { ReactNode } from "react"
 import Button from "@/components/elements/Button"
 
 interface Props {
     children?: ReactNode
     className?: string
-    onClickHandler?: () => void
+    onClickHandler?: (e: any) => void
     variant?: string
     text?: string
     title?: string
@@ -49,7 +50,7 @@ const Footer = (props: Props) => {
         <div className="flex items-center justify-between p-4"> 
             <div className="text-xl font-bold text-white">{`Rp. ${price?.toLocaleString('id-ID')},00`}</div>
             <div className="text-xl font-bold text-white">{`* ${rating}`}</div>
-            {/* <Button variant = {variant} text='text-white' children={btnText} classname = 'my-5 mr-5' onClick={() => onClickHandler} /> */}
+            <Button variant = {variant} text='text-white' children={btnText} classname = 'my-5 mr-5' onClick={() => onClickHandler} />
         </div>
     )
 }

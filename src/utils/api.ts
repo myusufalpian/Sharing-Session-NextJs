@@ -12,7 +12,7 @@ export const fetchApiWithToken = async (url: string, method: string, token: stri
     return res;
 }
 
- export const fetchApi = async (url: string, method: string, body?: any) : Promise<any> => {
+export const fetchApi = async (url: string, method: string, body?: any) : Promise<any> => {
     const res = await fetch(`${Urls.baseUrl}${url}`, {
         headers: {
             'Content-Type': 'application/json',
