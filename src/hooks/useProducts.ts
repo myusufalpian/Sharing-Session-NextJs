@@ -12,7 +12,8 @@ const useProducts = () => {
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
-    const [sortCriteria, setSortCriteria] = useState<string>('rating');
+    const [sortCriteria, setSortCriteria] = useState<string>('All');
+    const [sortOrder, setSortOrder] = useState<string>('asc');
     const [inStockOnly, setInStockOnly] = useState<boolean>(false);
     const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -114,14 +115,25 @@ const useProducts = () => {
 		};
 	
 		const response = await fetchApi(`carts/add`, 'POST', body);
-		const data = await (await response).json(); 
 		if (response.status === 200) {
-			// Handle success (e.g., show a success alert or update cart state)
+			alert('Product added to cart successfully');
 		} else {
-			// Handle error (e.g., show an error alert)
+            alert('Failed to add product to cart');
 		}
 	};
-	
+
+    const handleSelectedSort = async (sortCriteria: string, sortOrder: string) => {
+        if (sortCriteria === "All") return;
+        const response = await fetchApi(`products?sortBy=${sortCriteria}&order=${sortOrder}`, 'GET');
+        const data = await response.json();
+        
+        if (response.status === 200) {
+            setProductList(data.products);
+            dispatch(setProducts(data.products));
+        } else {
+            alert("Something went wrong when getting category list");
+        }
+    };
 
     return {
         filteredProducts,
@@ -130,9 +142,14 @@ const useProducts = () => {
         sortCriteria,
         setSelectedCategory,
         setSortCriteria,
+        sortOrder,
+        setSortOrder,
         handleSearchProduct,
         handleSelectedCategory,
 		handleAddToCart,
+        handleSelectedSort,
+        setProductList,
+        productList,
     };
 };
 

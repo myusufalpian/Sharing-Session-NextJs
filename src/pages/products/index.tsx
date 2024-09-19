@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useProducts from "@/hooks/useProducts";
 import CustomAlert from "@/components/fragments/CustomAlert";
 import QuantityModal from "@/components/fragments/QuantityModal";
@@ -14,9 +14,13 @@ const ProductsPage = () => {
         categories,
         selectedCategory,
         sortCriteria,
-        setSelectedCategory,
         setSortCriteria,
+        sortOrder,
+        setSortOrder,
         handleSearchProduct,
+        handleSelectedCategory,
+        setProductList,
+        productList,
     } = useProducts();
 
     const user = useSelector((state: any) => state.auth.user);
@@ -53,7 +57,7 @@ const ProductsPage = () => {
         
         const body = {
             userId: currentUser?.id,
-            products: [{ id: product.id, quantity }] // Send quantity along with product ID
+            products: [{ id: product.id, quantity }]
         };
     
         const response = await fetchApi(`carts/add`, 'POST', body);
@@ -61,7 +65,7 @@ const ProductsPage = () => {
             throw new Error("Failed to add product to cart.");
         }
     };
-    
+
     const handleAddToCart = async (quantity: number) => {
         if (selectedProduct) {
             try {
@@ -76,9 +80,25 @@ const ProductsPage = () => {
         }
     };
 
+    const handleSelectedSort = async (criteria: string, order: string) => {
+        if (criteria === "All") return;
+        const response = await fetchApi(`products?sortBy=${criteria}&order=${order}`, 'GET');
+        const data = await response.json();
+
+        if (response.status === 200) {
+            setProductList(data.products);
+        } else {
+            alert("Something went wrong when getting the product list");
+        }
+    };
+
+    useEffect(() => {
+        handleSelectedSort(sortCriteria, sortOrder);
+    }, [sortCriteria, sortOrder]);
+
     return (
         <div className="flex flex-col items-center">
-            <h1 className="fixed mb-4 text-2xl font-semibold text-blue-900 underline">Product Page</h1>
+            <h1 className="text-2xl font-semibold text-blue-900 underline">Product Page</h1>
             <div className="flex gap-4 mt-16">
                 <input 
                     type="text" 
@@ -88,7 +108,7 @@ const ProductsPage = () => {
                 />
                 <select
                     value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    onChange={(e) => handleSelectedCategory(e.target.value)}
                     className="p-2 border rounded"
                 >
                     <option value="All">All Categories</option>
@@ -102,8 +122,20 @@ const ProductsPage = () => {
                     onChange={(e) => setSortCriteria(e.target.value)}
                     className="p-2 border rounded"
                 >
-                    <option value="rating">Rating</option>
+                    <option value="All">Select Sorting Type</option>
+                    <option value="category">Category</option>
                     <option value="price">Price</option>
+                    <option value="rating">Rating</option>
+                    <option value="stock">Stock</option>
+                    <option value="title">Title</option>
+                </select>
+                <select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)} // Update sortOrder
+                    className="p-2 border rounded"
+                >
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
                 </select>
             </div>
 
@@ -134,7 +166,7 @@ const ProductsPage = () => {
             <QuantityModal 
                 isOpen={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
-                onConfirm={(quantity) => handleAddToCart(quantity)} // Pass the quantity to handleAddToCart
+                onConfirm={(quantity) => handleAddToCart(quantity)}
             />
         </div>
     );

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-children-prop */
 import { ReactNode } from "react"
 import Button from "@/components/elements/Button"
@@ -13,6 +14,7 @@ interface Props {
     btnText?: string
     price?: number
     rating?: number
+    alt?: string
 }
 
 const CardProduct = (props: Props) => {
@@ -26,12 +28,8 @@ const CardProduct = (props: Props) => {
 }
 
 const Header = (props: Props) => {
-    const { imgSource } = props;
-    return (
-        <a href="">
-            <img src={imgSource} alt="Dad Shoes" className="p-5 rounded-t-lg" />
-        </a>
-    )
+    const { imgSource, alt } = props;
+    return <img src={imgSource} alt={alt} className="p-5 rounded-t-lg" />
 }
 
 const Body = ( props: Props) : JSX.Element => {
@@ -48,7 +46,7 @@ const Footer = (props: Props) => {
     const { btnText, variant = '', onClickHandler, price, rating } = props;
     return (
         <div className="flex items-center justify-between p-4"> 
-            <div className="text-xl font-bold text-white">{`Rp. ${price?.toLocaleString('id-ID')},00`}</div>
+            <div className="text-xl font-bold text-white">{`$ ${price?.toLocaleString('id-ID')}`}</div>
             <div className="text-xl font-bold text-white">{`* ${rating}`}</div>
             <Button variant = {variant} text='text-white' children={btnText} classname = 'my-5 mr-5' onClick={() => onClickHandler} />
         </div>
