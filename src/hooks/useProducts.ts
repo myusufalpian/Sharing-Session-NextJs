@@ -3,7 +3,6 @@ import { fetchApi } from "@/utils/api";
 import { Product } from "@/constants/type/product";
 import { setProducts } from "@/redux/store/productSlice";
 import { useDispatch, useSelector } from "react-redux";
-import CustomAlert from '@/components/fragments/CustomAlert';
 
 const useProducts = () => {
 	const user = useSelector((state: any) => state.auth.user);

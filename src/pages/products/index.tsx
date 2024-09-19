@@ -44,6 +44,7 @@ const ProductsPage = () => {
     };
 
     const handleOpenQuantityModal = (product: Product) => {
+        console.log("Opening modal for product:", product);
         setSelectedProduct(product);
         setIsModalOpen(true);
     };
@@ -151,8 +152,7 @@ const ProductsPage = () => {
                             rating={product.rating}
                             variant="bg-green-800"
                             btnText={`Add to Cart`}
-                            onClickHandler={(e) => {
-                                e.stopPropagation();
+                            onClickHandler={() => {
                                 handleOpenQuantityModal(product);
                             }}
                         />

@@ -6,7 +6,7 @@ import Button from "@/components/elements/Button"
 interface Props {
     children?: ReactNode
     className?: string
-    onClickHandler?: (e: any) => void
+    onClickHandler?: (e: React.MouseEvent) => void
     variant?: string
     text?: string
     title?: string
@@ -44,13 +44,25 @@ const Body = ( props: Props) : JSX.Element => {
 
 const Footer = (props: Props) => {
     const { btnText, variant = '', onClickHandler, price, rating } = props;
+    const handleClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onClickHandler) {
+            onClickHandler(e);
+        }
+    };
     return (
         <div className="flex items-center justify-between p-4"> 
             <div className="text-xl font-bold text-white">{`$ ${price?.toLocaleString('id-ID')}`}</div>
             <div className="text-xl font-bold text-white">{`* ${rating}`}</div>
-            <Button variant = {variant} text='text-white' children={btnText} classname = 'my-5 mr-5' onClick={() => onClickHandler} />
+            <Button 
+                variant={variant} 
+                text='text-white' 
+                children={btnText} 
+                classname='my-5 mr-5' 
+                onClick={handleClick}
+            />
         </div>
-    )
+    );
 }
 
 CardProduct.Header = Header;
