@@ -5,7 +5,9 @@ const SignOutPage = () : JSX.Element => {
     const router = useRouter();
     useEffect(() => {
         localStorage.removeItem('Authorization');
-        router.push('/auth/signin');
+        router.push('/auth/signin').then( () => {
+            window.location.reload();
+        });
     }, [router]);
     return(
         <></>

@@ -20,10 +20,10 @@ const CustomAlert: React.FC<CustomAlertProps> = ({ message, onClose, type }) => 
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
             <div className={`border-l-4 p-5 rounded shadow-lg ${getAlertStyles()}`}>
                 <p>{message}</p>
-                <button onClick={onClose} className="mt-4 p-2 bg-blue-500 text-white rounded">
+                <button onClick={onClose} className="mt-4 py-2 px-8 bg-blue-500 text-white rounded">
                     Close
                 </button>
             </div>

@@ -1,5 +1,3 @@
-// pages/products/[id].tsx
-
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { fetchApi } from '@/utils/api';
@@ -28,7 +26,7 @@ const ProductDetailPage = () => {
         setErrorHandler(null);
         try {
             const response = await fetchApi(`products/${productId}`, 'GET');
-            if (response.status === 200) {
+            if (response.ok) {
                 const data = await response.json();
                 setProduct(data);
             } else {
@@ -39,6 +37,7 @@ const ProductDetailPage = () => {
                 setIsError(true);
             }
         } catch (error) {
+            console.error('Error fetching product details:', error);
             setErrorHandler({
                 statusCode: 500,
                 message: 'Failed to fetch product details',
