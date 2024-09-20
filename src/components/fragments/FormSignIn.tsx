@@ -22,7 +22,6 @@ const FormSignIn = (): JSX.Element => {
             const data = await response.json();
             
             if (response.status === 200) {
-                // Save token and user info in Redux store
                 dispatch(setAuth(data.token));
                 const user = {
                     id: data.id,

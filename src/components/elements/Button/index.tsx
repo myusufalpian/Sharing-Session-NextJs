@@ -18,7 +18,7 @@ const Button = ({
     return (
         <button 
             className={`h-10 px-6 rounded-md ${variant} ${text} drop-shadow-md ${classname}`} 
-            type='button'
+            type='submit'
             onClick={onClick}
         >
             {children}
