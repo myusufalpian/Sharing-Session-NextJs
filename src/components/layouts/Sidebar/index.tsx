@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useState } from "react";
+import { Product } from '../../../constants/type/product';
 
 const Sidebar = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -30,22 +31,22 @@ const Sidebar = () => {
 					<h3 className="pt-10 pl-4 mb-4 text-xl font-bold">Toko Biru</h3>
 					<ul>
 						<Link href={"/"}><li className="px-4 py-2 hover:bg-gray-950">Home</li></Link>
+						<Link href="/profile"><li className="px-4 py-2 hover:bg-gray-950">Account</li></Link>
+						<Link href={"/carts"}><li className="px-4 py-2 hover:bg-gray-950">Cart</li></Link>
 						<li>
 							<button
 								onClick={toggleDropdown}
 								className="w-full px-4 py-2 text-left hover:bg-gray-950"
 							>
-								About
+								Product
 							</button>
 							{isDropdownOpen && (
 								<ul className="pl-4 bg-gray-950">
-									<Link href="/profile"><li className="px-4 py-2 hover:bg-gray-950">Account</li></Link>
-									<Link href="/order"><li className="px-4 py-2 hover:bg-gray-950">Orders</li></Link>
+									<Link href="/products"><li className="px-4 py-2 hover:bg-gray-950">Search Product</li></Link>
+									<Link href="/products/add"><li className="px-4 py-2 hover:bg-gray-950">Add Product</li></Link>
 								</ul>
 							)}
 						</li>
-						<Link href={"/products"}><li className="px-4 py-2 hover:bg-gray-950">Product</li></Link>
-						<Link href={"/carts"}><li className="px-4 py-2 hover:bg-gray-950">Cart</li></Link>
 						<Link href={"/auth/signout"}><li className="px-4 py-2 hover:bg-gray-950">Sign Out</li></Link>
 					</ul>
 				</div>

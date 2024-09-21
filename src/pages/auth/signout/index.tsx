@@ -5,6 +5,8 @@ const SignOutPage = () : JSX.Element => {
     const router = useRouter();
     useEffect(() => {
         localStorage.removeItem('Authorization');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('User');
         router.push('/auth/signin').then( () => {
             window.location.reload();
         });

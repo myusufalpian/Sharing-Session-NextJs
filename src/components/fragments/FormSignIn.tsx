@@ -50,11 +50,20 @@ const FormSignIn = (): JSX.Element => {
                     email: data.email,
                     firstName: data.firstName,
                     lastName: data.lastName,
+                    age: data.age,
                     gender: data.gender,
-                    image: data.image
+                    image: data.image,
+                    phone: data.phone,
+                    birthDate: data.birthDate,
+                    bloodGroup: data.bloodGroup,
+                    height: data.height,
+                    weight: data.weight,
+                    eyeColor: data.eyeColor,
+                    maidenName: data.maidenName,
                 };
                 dispatch(setUser(user));
-                localStorage.setItem('Authorization', data.token);
+                localStorage.setItem('Authorization', data.accessToken);
+                localStorage.setItem('refreshToken', data.refreshToken);
                 localStorage.setItem('User', JSON.stringify(user));
                 setAlertMessage('Sign In Successful');
                 setAlertType('success');

@@ -6,17 +6,18 @@ interface Props {
     children: ReactNode,
     htmlfor: string,
     type: string,
-    placeholder: string,
+    placeholder?: string,
     name: string,
-    id: string
+    id: string,
+    value?: string
 }
 
 const InputForm = (props: Props) : JSX.Element => {
-    const { type, placeholder, name, id, children } = props
+    const { type, placeholder, name, id, children, value } = props
     return(
         <div className="mb-6">
             <Label htmlfor={name}>{children}</Label>
-            <Input type={type} placeholders={placeholder} name={name} id={id} />
+            <Input type={type} placeholders={placeholder} name={name} id={id} value={value} />
         </div>
     )
 }

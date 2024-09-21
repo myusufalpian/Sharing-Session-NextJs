@@ -6,8 +6,16 @@ interface User {
     email: string;
     firstName: string;
     lastName: string;
+    age: number;
     gender: string;
     image: string;
+    phone: string;
+    birthDate: string;
+    maidenName: string;
+    bloodGroup: string;
+    weight: number;
+    height: number;
+    eyeColor: string;
 }
 
 interface AuthState {
