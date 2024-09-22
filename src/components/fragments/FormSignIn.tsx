@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { setAuth, setUser } from '@/redux/store/authSlice';
+import { setAuth } from '@/redux/store/authSlice';
 import { fetchApi } from '@/utils/api';
 import Button from '../elements/Button';
 import InputForm from '../elements/Input';
@@ -41,30 +41,10 @@ const FormSignIn = (): JSX.Element => {
         try {
             const response = await fetchApi(`auth/login`, 'POST', { username, password });	
             const data = await response.json();
-            
             if (response.status === 200) {
                 dispatch(setAuth(data.token));
-                const user = {
-                    id: data.id,
-                    username: data.username,
-                    email: data.email,
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    age: data.age,
-                    gender: data.gender,
-                    image: data.image,
-                    phone: data.phone,
-                    birthDate: data.birthDate,
-                    bloodGroup: data.bloodGroup,
-                    height: data.height,
-                    weight: data.weight,
-                    eyeColor: data.eyeColor,
-                    maidenName: data.maidenName,
-                };
-                dispatch(setUser(user));
                 localStorage.setItem('Authorization', data.accessToken);
                 localStorage.setItem('refreshToken', data.refreshToken);
-                localStorage.setItem('User', JSON.stringify(user));
                 setAlertMessage('Sign In Successful');
                 setAlertType('success');
                 setShowAlert(true);

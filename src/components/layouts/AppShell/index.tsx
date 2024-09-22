@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Sidebar from "../Sidebar";
@@ -21,12 +22,17 @@ const AppShell = ({ children }: Props): JSX.Element => {
     const { asPath } = router;
     const dispatch = useDispatch();
     const [error, setError] = useState<{ statusCode: number; message: string } | null>(null);
+    let prevPathName: string = '';
 
     useEffect(() => {
         const storedUser = localStorage.getItem('User');
         if (storedUser) {
             dispatch(setUser(JSON.parse(storedUser)));
         }
+        const handleRouteChange = () => {
+            localStorage.setItem('previousPath', window.location.pathname);
+        };
+        handleRouteChange();
         const isValidBaseRoute = routeList.includes(asPath);
         const isValidParamRoute = routeParamList.some(pattern => pattern.test(asPath));
         const isValidRoute = isValidBaseRoute || isValidParamRoute;
@@ -35,16 +41,14 @@ const AppShell = ({ children }: Props): JSX.Element => {
             return;
         }
         setError(null);
-        console.log('Current Path:', asPath);
-        console.log('Checking auth for path:', asPath);
-        console.log('Is in routeListDisabledAuth:', routeListDisabledAuth.includes(asPath));
         if (!routeListDisabledAuth.includes(asPath)) {
-            getAuthData();
+            prevPathName = localStorage.getItem('previousPath') ?? '';
+            getAuthData(prevPathName);
         }
     }, [dispatch, asPath]);
     
 
-    const getAuthData = async () => {
+    const getAuthData = async (prevPath?: string) => {
         const token = localStorage.getItem('Authorization');
         const signInPath = '/auth/signin';
         const signOutPath = '/auth/signout';    
@@ -60,7 +64,25 @@ const AppShell = ({ children }: Props): JSX.Element => {
             const response = await fetchApiWithToken('auth/me', 'GET', token);
             if (response.status === 200) {
                 const data = await response.json();
-                dispatch(setUser(data.user));
+                const user = {
+                    id: data.id,
+                    username: data.username,
+                    email: data.email,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    age: data.age,
+                    gender: data.gender,
+                    image: data.image,
+                    phone: data.phone,
+                    birthDate: data.birthDate,
+                    bloodGroup: data.bloodGroup,
+                    height: data.height,
+                    weight: data.weight,
+                    eyeColor: data.eyeColor,
+                    maidenName: data.maidenName,
+                };
+                dispatch(setUser(user));
+                localStorage.setItem('User', JSON.stringify(user));
             } else {
                 await refreshToken();
             }
