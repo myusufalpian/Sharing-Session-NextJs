@@ -4,10 +4,10 @@ import { fetchApi } from "@/utils/api";
 import InputForm from "@/components/elements/Input";
 import Button from "@/components/elements/Button";
 import { addProduct } from '@/redux/store/postDataProductSlice';
-import { RootState } from '@/redux/store/store';
+import { RootState, AppDispatch } from '@/redux/store/store';
 
 const AddProductLayout = () : JSX.Element => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const { loading, error } = useSelector((state: RootState) => state.postProduct);
     
     const [categoryList, setCategoryList] = useState([]);
@@ -54,18 +54,16 @@ const AddProductLayout = () : JSX.Element => {
         setIsConfirming(false);
     };
 
-    const handleConfirm = () => {
-        dispatch(addProduct({ productData: formData }))
-            .unwrap()
-            .then(() => {
-                alert("Product added successfully");
-            })
-            .catch((error: Error) => {
-                alert(`Failed to add product: ${error.message}`);
-            })
-            .finally(() => {
-                setIsConfirming(false);
-            });
+    const handleConfirm = async () => {
+        try {
+            const result = await dispatch(addProduct({ productData: formData }));
+            const unwrappedResult = await result.payload;
+            alert("Product added successfully");
+        } catch (error: any) {
+            alert(`Failed to add product: ${error.message}`);
+        } finally {
+            setIsConfirming(false);
+        }
     };
 
     return (
